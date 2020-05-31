@@ -201,6 +201,15 @@ def nats_from_str(t,k) :
   unzipped = zip(*zipped)
   return tuple(unzipped)
 
+def to_dataset(k,fname) :
+  qs, rs = nats_from_str(t(0), k)
+  with open(fname,'w') as f :
+    for i in range(len(qs)) :
+      q=qs[i]
+      r=rs[i]
+      s=q.strip()+":"+r.strip()
+      print(s,file=f)
+
 def mats_from(n,k) :
   pss=[]
   tree=t(n)
@@ -312,13 +321,17 @@ def s1():
     print('A:',cs)
     print('')
 
+def dgo() : to_dataset(2**16,'cats.txt')
 
-if __name__=="__main__" :
-  #t0(42)
-  #t0(256)
-  r,s=mats_from(0,5)
+def mgo():
+  # t0(42)
+  # t0(256)
+  r, rs = mats_from(0, 5)
   print(len(list(r)))
-  for c in r :
+  for c in rs:
     print(c)
     print('')
+
+if __name__=="__main__" :
+  pass
 
