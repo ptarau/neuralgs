@@ -259,8 +259,8 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
     print(r, len(input_text), len(target_text), '==', len(decoded_sentence))
     print(r,input_text,target_text,'==',decoded_sentence)
 
-def run(data_file,model_file,sep='\t',cfg =
-     {'batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,'iterations' : 1}):
+def run_with(data_file,model_file,cfg = {'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,'iterations' : 1}):
+  sep=cfg['sep']
   data = Data(data_file, sep, cfg)
   model,encoder_input_data, decoder_input_data, decoder_target_data=build_model(data,cfg)
   model.summary()
@@ -274,16 +274,16 @@ def run(data_file,model_file,sep='\t',cfg =
   model.save(model_file)
 
 def theo() :
-  run('data/tlin.txt','models/tlin_s2s',sep=':',cfg =
-    {'batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
+  run_with('data/tlin.txt','models/tlin_s2s',cfg =
+    {'sep':':','batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
 
 def full_theo() :
-  run('data/full_tlin.txt','models/full_tlin_s2s',sep=':',cfg =
-    {'batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
+  run_with('data/full_tlin.txt','models/full_tlin_s2s',cfg =
+    {'sep':':','batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
 
 def cats() :
-  run('data/cats.txt','models/cats_s2s',sep=':',cfg =
-    {'batch_size': 64, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':100})
+  run_with('data/cats.txt','models/cats_s2s',cfg =
+    {'sep':':','batch_size': 64, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':100})
 
 def run() :
   theo()
