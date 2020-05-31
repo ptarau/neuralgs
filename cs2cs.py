@@ -29,13 +29,11 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 import numpy as np
 
-#TRAINING_FILE='training.txt'
-#MODEL_FILE='tlin_model.tf'
-
 
 # All the symbols, .' for padding
 
 # reads a theorem - proof pair for implicational linear logic
+# or a tree-based natural number and ist successor, as  a pair
 
 def init_with(cfg) :
   training_file = cfg['TRAINING_FILE']
@@ -148,10 +146,8 @@ def vectorize(ctable,questions,expected,chars,MAXLEN) :
 
   return x_train,y_train,x_val,y_val
 
-
-
-print('Build model...')
 def build_model(cfg,chars,MAXLEN) :
+  print('Build model...')
   model = Sequential()
   # "Encode" the input sequence using an RNN, producing an output of HIDDEN_SIZE.
   # Note: In a situation where your input sequences have a variable length,
@@ -267,7 +263,7 @@ def cats() :
   )
   run_with(cfg)
 
-
+# runs everything
 def run() :
   tlin()
   full_tlin()
