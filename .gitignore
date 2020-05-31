@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 
-data/
+#data/
 models/
 old/
