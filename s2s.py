@@ -152,11 +152,6 @@ def learn(model,cfg,encoder_input_data, decoder_input_data, decoder_target_data)
     ## Train the model
     """
 
-    model.compile(
-      #optimizer="rmsprop", loss="categorical_crossentropy", metrics=["accuracy"]
-      optimizer = "adam", loss = "categorical_crossentropy", metrics = ["accuracy"]
-    )
-
     #model.summary()
 
     model.fit(
@@ -202,7 +197,7 @@ def decode_sequence(input_seq,encoder_model,decoder_model,data,reverse_target_ch
       states_value = [h, c]
     return decoded_sentence
 
-def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, model) :
+def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, model_file) :
   """
   ## Run inference (sampling)
 
@@ -212,6 +207,7 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
   Output will be the next target token.
   3. Repeat with the current target token and current states
   """
+  model = keras.models.load_model(model_file)
 
   # Define sampling models
   # Restore the model and construct the encoder and decoder.
@@ -259,19 +255,26 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
     print(r, len(input_text), len(target_text), '==', len(decoded_sentence))
     print(r,input_text,target_text,'==',decoded_sentence)
 
-def run_with(data_file,model_file,cfg = {'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,'iterations' : 1}):
+def run_with(data_file,model_file,infer_only=False,cfg =
+    {'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,'iterations' : 1}):
   sep=cfg['sep']
   data = Data(data_file, sep, cfg)
+
   model,encoder_input_data, decoder_input_data, decoder_target_data=build_model(data,cfg)
   model.summary()
   print(cfg)
-  data_size=len(data.io_map)
-  for i in range(cfg['iterations']) :
-    print("ITERATION:", i, '/', cfg['iterations'], 'on data_size:',data_size)
-    learn(model,cfg, encoder_input_data, decoder_input_data, decoder_target_data)
-    infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data,model)
+  if not infer_only :
+    data_size=len(data.io_map)
+    model.compile(
+      #optimizer="rmsprop", loss="categorical_crossentropy", metrics=["accuracy"]
+      optimizer = "adam", loss = "categorical_crossentropy", metrics = ["accuracy"]
+    )
+    for i in range(cfg['iterations']) :
+       print("ITERATION:", i, '/', cfg['iterations'], 'on data_size:',data_size,'file:',data_file)
+       learn(model,cfg, encoder_input_data, decoder_input_data, decoder_target_data)
+    model.save(model_file)
 
-  model.save(model_file)
+  infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data,model_file)
 
 def theo() :
   run_with('data/tlin.txt','models/tlin_s2s',cfg =
