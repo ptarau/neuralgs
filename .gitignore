@@ -130,5 +130,6 @@ dmypy.json
 
 
 #data/
+.idea/
 models/
 old/
