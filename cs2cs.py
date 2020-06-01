@@ -180,7 +180,26 @@ def build_model(cfg,chars,MAXLEN) :
 def ITERATIONS(cfg) :
   return min(100, cfg['TRAINING_SIZE'] // cfg['BATCH_SIZE'])
 
-def evaluate(cfg,ctable,model,x_train, y_train,x_val, y_val) :
+def test_with(cfg,ctable,model,x_val,y_val) :
+  # Select GUESSES samples from the validation set at random so we can visualize
+  # errors.
+  print('TESTING')
+  for i in range(cfg['GUESSES']):
+    ind = np.random.randint(0, len(x_val))
+    rowx, rowy = x_val[np.array([ind])], y_val[np.array([ind])]
+    preds = model.predict_classes(rowx, verbose=0)
+    q = ctable.decode(rowx[0])
+    correct = ctable.decode(rowy[0], calc_argmax=True)
+    guess = ctable.decode(preds[0], calc_argmax=False)
+    print('Q', q, end=' ')
+    print('T', correct, end=' ')
+    if correct == guess:
+      print('+', end=' ')
+    else:
+      print('-', end=' ')
+    print(guess)
+    
+def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
   its=ITERATIONS(cfg)
   for iteration in range(0, its):
     print('ITERATIONS:',its)
@@ -192,33 +211,23 @@ def evaluate(cfg,ctable,model,x_train, y_train,x_val, y_val) :
               epochs=1,
               validation_data=(x_val, y_val))
 
-    # Select GUESSES samples from the validation set at random so we can visualize
-    # errors.
-    for i in range(cfg['GUESSES']):
-        ind = np.random.randint(0, len(x_val))
-        rowx, rowy = x_val[np.array([ind])], y_val[np.array([ind])]
-        preds = model.predict_classes(rowx, verbose=0)
-        q = ctable.decode(rowx[0])
-        correct = ctable.decode(rowy[0], calc_argmax=True)
-        guess = ctable.decode(preds[0], calc_argmax=False)
-        print('Q', q, end=' ')
-        print('T', correct, end=' ')
-        if correct == guess:
-            print( '+', end=' ')
-        else:
-            print( '-' , end=' ')
-        print(guess)
+    test_with(cfg,ctable,model,x_val,y_val)
   model.save(cfg['MODEL_FILE']) #, save_format='tf')
 
-def run_with(cfg) :
+def run_with(cfg,test_only=True) :
   questions, expected, chars, MAXLEN = init_with(cfg)
   ctable = CharacterTable(chars)
   x_train, y_train, x_val, y_val = vectorize(ctable,questions,expected,chars,MAXLEN)
-  model=build_model(cfg,chars,MAXLEN)
-  evaluate(cfg,ctable, model, x_train, y_train, x_val, y_val)
+  if test_only :
+    model_file=cfg['MODEL_FILE']
+    model = keras.models.load_model(model_file)
+    test_with(cfg,ctable,model,x_val,y_val)
+  else :
+    model=build_model(cfg,chars,MAXLEN)
+    learn(cfg,ctable, model, x_train, y_train, x_val, y_val)
 
 
-def tlin() :
+def tlin(test_only=False) :
   cfg = dict(
     TRAINING_FILE='data/tlin.txt',
     MODEL_FILE='models/tlin_cs2cs',
@@ -229,11 +238,11 @@ def tlin() :
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
     LAYERS=1,
-    GUESSES=20
+    GUESSES=30
   )
-  run_with(cfg)
+  run_with(cfg,test_only=test_only)
 
-def full_tlin() :
+def full_tlin(test_only=False) :
   cfg = dict(
     TRAINING_FILE='data/full_tlin.txt',
     MODEL_FILE='models/full_tlin_cs2cs',
@@ -246,9 +255,9 @@ def full_tlin() :
     LAYERS=1,
     GUESSES=20
   )
-  run_with(cfg)
+  run_with(cfg,test_only=test_only)
 
-def cats() :
+def cats(test_only=False) :
   cfg = dict(
     TRAINING_FILE='data/cats.txt',
     MODEL_FILE='models/cats_cs2cs',
@@ -261,11 +270,16 @@ def cats() :
     LAYERS=1,
     GUESSES=20
   )
-  run_with(cfg)
+  run_with(cfg,test_only=test_only)
 
-# runs everything
+# runs everything, assuming models have been created
+def test() :
+  tlin(test_only=True)
+  full_tlin(test_only=True)
+  cats(test_only=True)
+
+# runs everything, builds models
 def run() :
   tlin()
   full_tlin()
   cats()
-

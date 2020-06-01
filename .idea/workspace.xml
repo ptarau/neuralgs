@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e694bd2-72ee-4501-b495-b2f4c2da0a3f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cs2cs.py" beforeDir="false" afterPath="$PROJECT_DIR$/cs2cs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/s2s.py" beforeDir="false" afterPath="$PROJECT_DIR$/s2s.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +36,7 @@
   <component name="ReadonlyStatusHandler">
     <option name="SHOW_DIALOG" value="false" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.cs2cs">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="-i" />
       <option name="PARENT_ENVS" value="true" />
@@ -49,6 +50,27 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
       <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="true" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="cs2cs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="neuralgs" />
+      <option name="INTERPRETER_OPTIONS" value="-i" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cs2cs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="true" />
@@ -80,6 +102,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.cs2cs" />
         <item itemvalue="Python.s2s" />
       </list>
     </recent_temporary>
@@ -108,25 +131,25 @@
     <option name="SHOW_UNVERSIONED_FILES_WHILE_COMMIT" value="false" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="498" y="242" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590941642161">
+    <state x="498" y="242" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590969262631">
       <screen x="39" y="23" width="2009" height="1129" />
     </state>
-    <state x="498" y="242" key="#com.intellij.execution.impl.EditConfigurationsDialog/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590941642161" />
-    <state width="705" height="1019" key="GridCell.Tab.0.bottom" timestamp="1590960680798">
+    <state x="498" y="242" key="#com.intellij.execution.impl.EditConfigurationsDialog/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590969262631" />
+    <state width="1001" height="1019" key="GridCell.Tab.0.bottom" timestamp="1590969846481">
       <screen x="39" y="23" width="2009" height="1129" />
     </state>
-    <state width="705" height="1019" key="GridCell.Tab.0.bottom/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590960680798" />
-    <state width="705" height="1019" key="GridCell.Tab.0.center" timestamp="1590960680798">
+    <state width="1001" height="1019" key="GridCell.Tab.0.bottom/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590969846481" />
+    <state width="1001" height="1019" key="GridCell.Tab.0.center" timestamp="1590969846481">
       <screen x="39" y="23" width="2009" height="1129" />
     </state>
-    <state width="705" height="1019" key="GridCell.Tab.0.center/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590960680798" />
-    <state width="705" height="1019" key="GridCell.Tab.0.left" timestamp="1590960680797">
+    <state width="1001" height="1019" key="GridCell.Tab.0.center/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590969846481" />
+    <state width="1001" height="1019" key="GridCell.Tab.0.left" timestamp="1590969846480">
       <screen x="39" y="23" width="2009" height="1129" />
     </state>
-    <state width="705" height="1019" key="GridCell.Tab.0.left/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590960680797" />
-    <state width="705" height="1019" key="GridCell.Tab.0.right" timestamp="1590960680798">
+    <state width="1001" height="1019" key="GridCell.Tab.0.left/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590969846480" />
+    <state width="1001" height="1019" key="GridCell.Tab.0.right" timestamp="1590969846481">
       <screen x="39" y="23" width="2009" height="1129" />
     </state>
-    <state width="705" height="1019" key="GridCell.Tab.0.right/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590960680798" />
+    <state width="1001" height="1019" key="GridCell.Tab.0.right/2048.55.1920.1057/39.23.2009.1129@39.23.2009.1129" timestamp="1590969846481" />
   </component>
 </project>

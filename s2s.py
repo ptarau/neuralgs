@@ -237,7 +237,7 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
 
   reverse_target_char_index = dict((i, char) for char, i in data.target_token_index.items())
 
-  for _ in range(10):
+  for _ in range(50):
     # Take one sequence (part of the training set)
     # for trying out decoding.
     seq_index=random.randrange(len(data.io_map))
@@ -276,17 +276,22 @@ def run_with(data_file,model_file,infer_only=False,cfg =
 
   infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data,model_file)
 
-def theo() :
-  run_with('data/tlin.txt','models/tlin_s2s',cfg =
+def theo(infer_only=False) :
+  run_with('data/tlin.txt','models/tlin_s2s',infer_only=infer_only,cfg =
     {'sep':':','batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
 
-def full_theo() :
-  run_with('data/full_tlin.txt','models/full_tlin_s2s',cfg =
+def full_theo(infer_only=False) :
+  run_with('data/full_tlin.txt','models/full_tlin_s2s',infer_only=infer_only,cfg =
     {'sep':':','batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
 
-def cats() :
-  run_with('data/cats.txt','models/cats_s2s',cfg =
+def cats(infer_only=False) :
+  run_with('data/cats.txt','models/cats_s2s',infer_only=infer_only,cfg =
     {'sep':':','batch_size': 64, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':100})
+
+def test() :
+  theo(infer_only=True)
+  full_theo(infer_only=True)
+  cats(infer_only=True)
 
 def run() :
   theo()
