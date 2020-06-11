@@ -272,6 +272,23 @@ def cats(test_only=False) :
   )
   run_with(cfg,test_only=test_only)
 
+
+def smiles(test_only=False) :
+  cfg = dict(
+    TRAINING_FILE='data/smiles.txt',
+    MODEL_FILE='models/smiles_cs2cs',
+    # Parameters for the model and dataset.
+    TRAINING_SIZE=2 ** 18,
+    # Try replacing LSTM, GRU, or SimpleRNN.
+    RNN=layers.LSTM,
+    HIDDEN_SIZE=128,
+    BATCH_SIZE=32,
+    LAYERS=1,
+    GUESSES=30
+  )
+  run_with(cfg,test_only=test_only)
+
+
 # runs everything, assuming models have been created
 def test() :
   tlin(test_only=True)
