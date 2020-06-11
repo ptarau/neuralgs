@@ -189,15 +189,18 @@ def test_with(cfg,ctable,model,x_val,y_val) :
     rowx, rowy = x_val[np.array([ind])], y_val[np.array([ind])]
     preds = model.predict_classes(rowx, verbose=0)
     q = ctable.decode(rowx[0])
+    q=q.replace('.','')
     correct = ctable.decode(rowy[0], calc_argmax=True)
+    correct=correct.replace('.','')
     guess = ctable.decode(preds[0], calc_argmax=False)
-    print('Q', q, end=' ')
-    print('T', correct, end=' ')
+    guess=guess.replace('.','')
     if correct == guess:
       print('+', end=' ')
     else:
       print('-', end=' ')
-    print(guess)
+    print('Q =', q, end=' ')
+    print('T =', correct, end=' ')
+    print('A =',guess)
     
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
   its=ITERATIONS(cfg)
