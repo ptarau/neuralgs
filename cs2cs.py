@@ -42,7 +42,6 @@ def init_with(cfg) :
   max_len=0
   S='.'
   chars = set()
-  chars.add(S)
   with open(training_file,'r') as f:
     for l in f.readlines() :
       l=l[:-1]
@@ -54,7 +53,7 @@ def init_with(cfg) :
       for c in t : chars.add(c)
       for c in x : chars.add(c)
 
-  chars=sorted(chars)
+  chars=[S]+sorted(chars)
   #print(max_len, chars)
   for i,x in enumerate(qs) :
     qs[i]=pad_to_str(S,max_len,x)
@@ -204,16 +203,17 @@ def test_with(cfg,ctable,model,x_val,y_val) :
     
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
   its=ITERATIONS(cfg)
-  for iteration in range(0, its):
+  for iteration in range(0, its//100):
     print('ITERATIONS:',its)
     print()
     print('-' * 50)
     print('Iteration', iteration)
-    model.fit(x_train, y_train,
+    history=model.fit(x_train, y_train,
               batch_size=cfg['BATCH_SIZE'],
-              epochs=1,
+              epochs=100,
               validation_data=(x_val, y_val))
-
+    plot_graphs(history, 'accuracy')
+    plot_graphs(history, 'loss')
     test_with(cfg,ctable,model,x_val,y_val)
   model.save(cfg['MODEL_FILE']) #, save_format='tf')
 
@@ -278,8 +278,8 @@ def cats(test_only=False) :
 
 def smiles(test_only=False) :
   cfg = dict(
-    TRAINING_FILE='data/smiles.txt',
-    MODEL_FILE='models/smiles_cs2cs',
+    TRAINING_FILE='data/smiles_trimmed.txt',
+    MODEL_FILE='models/smiles_trimmed_cs2cs',
     # Parameters for the model and dataset.
     TRAINING_SIZE=2 ** 18,
     # Try replacing LSTM, GRU, or SimpleRNN.
@@ -291,6 +291,15 @@ def smiles(test_only=False) :
   )
   run_with(cfg,test_only=test_only)
 
+import matplotlib.pyplot as plt
+
+def plot_graphs(history, metric):
+  plt.plot(history.history[metric])
+  plt.plot(history.history['val_'+metric], '')
+  plt.xlabel("Epochs")
+  plt.ylabel(metric)
+  plt.legend([metric, 'val_'+metric])
+  plt.show()
 
 # runs everything, assuming models have been created
 def test() :
