@@ -28,7 +28,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 import numpy as np
-
+np.random.seed(0)
 
 # All the symbols, .' for padding
 
@@ -127,13 +127,19 @@ def vectorize(ctable,questions,expected,chars,MAXLEN) :
   # Shuffle (x, y) in unison
   indices = np.arange(len(y))
   np.random.shuffle(indices)
+  # ensure same shuffling for all runs
+  #print(indices[0:10])
+  #[162387 149843  60785 154195 129744 173381 118270  31251 149870  89622]
   x = x[indices]
   y = y[indices]
 
   # Explicitly set apart 10% for validation data that we never train over.
-  split_at = len(x) - len(x) // 10
-  (x_train, x_val) = x[:split_at], x[split_at:]
-  (y_train, y_val) = y[:split_at], y[split_at:]
+  split_at = len(x) - len(x) // 5
+  (x_train, x_val_test) = x[:split_at], x[split_at:]
+  (y_train, y_val_test) = y[:split_at], y[split_at:]
+  split_at = len(x_val_test) - len(x_val_test) // 2
+  (x_val,x_test) = x_val_test[:split_at], x_val_test[split_at:]
+  (y_val, y_test) = y_val_test[:split_at], y_val_test[split_at:]
 
   print('Training Data:')
   print(x_train.shape)
@@ -143,7 +149,11 @@ def vectorize(ctable,questions,expected,chars,MAXLEN) :
   print(x_val.shape)
   print(y_val.shape)
 
-  return x_train,y_train,x_val,y_val
+  print('Test Data:')
+  print(x_test.shape)
+  print(y_test.shape)
+
+  return x_train,y_train,x_val,y_val,x_test,y_test
 
 def build_model(cfg,chars,MAXLEN) :
   print('Build model...')
@@ -179,13 +189,13 @@ def build_model(cfg,chars,MAXLEN) :
 def ITERATIONS(cfg) :
   return min(100, cfg['TRAINING_SIZE'] // cfg['BATCH_SIZE'])
 
-def test_with(cfg,ctable,model,x_val,y_val) :
+def test_with(cfg,ctable,model,x_test,y_test) :
   # Select GUESSES samples from the validation set at random so we can visualize
   # errors.
   print('TESTING')
   for i in range(cfg['GUESSES']):
-    ind = np.random.randint(0, len(x_val))
-    rowx, rowy = x_val[np.array([ind])], y_val[np.array([ind])]
+    ind = np.random.randint(0, len(x_test))
+    rowx, rowy = x_test[np.array([ind])], y_test[np.array([ind])]
     preds = model.predict_classes(rowx, verbose=0)
     q = ctable.decode(rowx[0])
     q=q.replace('.','')
@@ -220,11 +230,11 @@ def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
 def run_with(cfg,test_only=True) :
   questions, expected, chars, MAXLEN = init_with(cfg)
   ctable = CharacterTable(chars)
-  x_train, y_train, x_val, y_val = vectorize(ctable,questions,expected,chars,MAXLEN)
+  x_train, y_train, x_val, y_val, x_test, y_test = vectorize(ctable,questions,expected,chars,MAXLEN)
   if test_only :
     model_file=cfg['MODEL_FILE']
     model = keras.models.load_model(model_file)
-    test_with(cfg,ctable,model,x_val,y_val)
+    test_with(cfg,ctable,model,x_test,y_test)
   else :
     model=build_model(cfg,chars,MAXLEN)
     learn(cfg,ctable, model, x_train, y_train, x_val, y_val)
