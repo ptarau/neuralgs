@@ -228,9 +228,9 @@ def test_with(cfg,ctable,model,x_test,y_test) :
 
 
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
-  its=ITERATIONS(cfg)
-  for iteration in range(0, its//100):
-    print('ITERATIONS:',its)
+  maxits=ITERATIONS(cfg)//100
+  for iteration in range(0, its):
+    print('ITERATION:', iter,'/',maxits)
     print()
     print('-' * 50)
     print('Iteration', iteration)
@@ -312,13 +312,13 @@ def smiles(test_only=False) :
     TRAINING_FILE='data/smiles.txt',
     MODEL_FILE='models/smiles_cs2cs',
     # Parameters for the model and dataset.
-    TRAINING_SIZE=2 ** 18,
+    TRAINING_SIZE=2 ** 14,
     # Try replacing LSTM, GRU, or SimpleRNN.
     RNN=layers.LSTM,
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
     LAYERS=1,
-    EPOCHS=20,
+    EPOCHS=5,
     GUESSES=30
   )
   run_with(cfg,test_only=test_only)
