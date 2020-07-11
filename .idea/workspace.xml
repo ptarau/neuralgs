@@ -4,6 +4,8 @@
     <list default="true" id="4e694bd2-72ee-4501-b495-b2f4c2da0a3f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cs2cs.py" beforeDir="false" afterPath="$PROJECT_DIR$/cs2cs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/smiles.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/smiles.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/smiles_trimmed.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
