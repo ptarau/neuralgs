@@ -126,9 +126,14 @@ def vectorize(ctable,questions,expected,chars,MAXLEN) :
 
   # Shuffle (x, y) in unison
   indices = np.arange(len(y))
+  np.random.seed(0)
   np.random.shuffle(indices)
   # ensure same shuffling for all runs
-  #print(indices[0:10])
+  print(indices[0:10])
+  # for cats() only
+  #assert indices[0:10].tolist() == \
+  #  [55458,26836,34921,41001,42101,53975,10906,49837,21398,63510]
+
   #[162387 149843  60785 154195 129744 173381 118270  31251 149870  89622]
   x = x[indices]
   y = y[indices]
@@ -193,7 +198,9 @@ def test_with(cfg,ctable,model,x_test,y_test) :
   # Select GUESSES samples from the validation set at random so we can visualize
   # errors.
   print('TESTING')
-  for i in range(cfg['GUESSES']):
+  good = 0
+  guesses=cfg['GUESSES']
+  for i in range(guesses):
     ind = np.random.randint(0, len(x_test))
     rowx, rowy = x_test[np.array([ind])], y_test[np.array([ind])]
     preds = model.predict_classes(rowx, verbose=0)
@@ -204,13 +211,22 @@ def test_with(cfg,ctable,model,x_test,y_test) :
     guess = ctable.decode(preds[0], calc_argmax=False)
     guess=guess.replace('.','')
     if correct == guess:
+      good+=1
       print('+', end=' ')
     else:
       print('-', end=' ')
     print('Q =', q, end=' ')
     print('T =', correct, end=' ')
     print('A =',guess)
-    
+  print('Evaluating model.')
+  eval_results = model.evaluate(x_test,
+                                y_test
+                               )
+  print('Done. Test loss: {:.4f}. Test acc: {:.2f}'.format(*eval_results))
+  print('good:',good,'/',guesses,'=',good/guesses)
+  print('-'*40,'\n')
+
+
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
   its=ITERATIONS(cfg)
   for iteration in range(0, its//100):
@@ -227,10 +243,12 @@ def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
     test_with(cfg,ctable,model,x_val,y_val)
   model.save(cfg['MODEL_FILE']) #, save_format='tf')
 
+
 def run_with(cfg,test_only=True) :
   questions, expected, chars, MAXLEN = init_with(cfg)
   ctable = CharacterTable(chars)
-  x_train, y_train, x_val, y_val, x_test, y_test = vectorize(ctable,questions,expected,chars,MAXLEN)
+  x_train, y_train, x_val, y_val, x_test, y_test = \
+    vectorize(ctable,questions,expected,chars,MAXLEN)
   if test_only :
     model_file=cfg['MODEL_FILE']
     model = keras.models.load_model(model_file)
@@ -266,7 +284,7 @@ def full_tlin(test_only=False) :
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
     LAYERS=1,
-    GUESSES=20
+    GUESSES=30
   )
   run_with(cfg,test_only=test_only)
 
@@ -281,7 +299,7 @@ def cats(test_only=False) :
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
     LAYERS=1,
-    GUESSES=20
+    GUESSES=30
   )
   run_with(cfg,test_only=test_only)
 
