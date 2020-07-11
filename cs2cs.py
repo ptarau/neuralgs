@@ -229,7 +229,7 @@ def test_with(cfg,ctable,model,x_test,y_test) :
 
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
   maxits=ITERATIONS(cfg)//100
-  for iteration in range(0, its):
+  for iteration in range(0, maxits):
     print('ITERATION:', iter,'/',maxits)
     print()
     print('-' * 50)
