@@ -28,7 +28,10 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 import numpy as np
+import random
+
 np.random.seed(0)
+random.seed(0)
 
 '''
 num_threads=0
@@ -241,6 +244,7 @@ def test_with(cfg,ctable,model,x_test,y_test) :
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
   maxits=ITERATIONS(cfg)//100
   history=None
+  fname=cfg['MODEL_FILE']
   for iteration in range(0, maxits):
     print('ITERATION:', iteration,'/',maxits)
     print()
@@ -252,8 +256,8 @@ def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
               validation_data=(x_val, y_val))
     test_with(cfg,ctable,model,x_val,y_val)
   model.save(cfg['MODEL_FILE']) #, save_format='tf')
-  plot_graphs(history, 'accuracy')
-  plot_graphs(history, 'loss')
+  plot_graphs(fname+"_acc",history, 'accuracy')
+  plot_graphs(fname+"_loss",history, 'loss')
 
 
 def run_with(cfg,test_only=True) :
@@ -281,7 +285,7 @@ def tlin(test_only=False) :
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
     LAYERS=1,
-    EPOCHS=20,
+    EPOCHS=100,
     GUESSES=30
   )
   run_with(cfg,test_only=test_only)
@@ -297,7 +301,7 @@ def full_tlin(test_only=False) :
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
     LAYERS=1,
-    EPOCHS=20,
+    EPOCHS=100,
     GUESSES=30
   )
   run_with(cfg,test_only=test_only)
@@ -313,7 +317,7 @@ def cats(test_only=False) :
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
     LAYERS=1,
-    EPOCHS=20,
+    EPOCHS=100,
     GUESSES=30
   )
   run_with(cfg,test_only=test_only)
@@ -337,13 +341,15 @@ def smiles(test_only=False) :
 
 import matplotlib.pyplot as plt
 
-def plot_graphs(history, metric):
+def plot_graphs(fname,history, metric):
   plt.plot(history.history[metric])
   plt.plot(history.history['val_'+metric], '')
   plt.xlabel("Epochs")
   plt.ylabel(metric)
   plt.legend([metric, 'val_'+metric])
-  plt.show()
+  #plt.show()
+  plt.savefig(fname+'.pdf', bbox_inches='tight')
+
 
 # runs everything, assuming models have been created
 def test() :

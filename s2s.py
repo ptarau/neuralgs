@@ -27,7 +27,7 @@ recurrent sequence-to-sequence model.
 - A decoder LSTM is trained to turn the target sequences into
     the same sequence but offset by one timestep in the future,
     a training process called "teacher forcing" in this context.
-    It uses as initial state the state vectors from the encoder.
+    It uses as initial state of the state vectors from the encoder.
     Effectively, the decoder learns to generate `targets[t+1...]`
     given `targets[...t]`, conditioned on the input sequence.
 - In inference mode, when we want to decode unknown input sequences, we:
@@ -259,18 +259,20 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
 
 import matplotlib.pyplot as plt
 
-def plot_graphs(history, metric):
+def plot_graphs(fname,history, metric):
   plt.plot(history.history[metric])
   plt.plot(history.history['val_'+metric], '')
   plt.xlabel("Epochs")
   plt.ylabel(metric)
   plt.legend([metric, 'val_'+metric])
-  plt.show()
+  #plt.show()
+  plt.savefig(fname+'.pdf', bbox_inches='tight')
 
 def run_with(data_file,model_file,infer_only=False,cfg =
     {'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,'iterations' : 1}):
   sep=cfg['sep']
   data = Data(data_file, sep, cfg)
+  fname=model_file
 
   model,encoder_input_data, decoder_input_data, decoder_target_data=build_model(data,cfg)
   model.summary()
@@ -286,22 +288,26 @@ def run_with(data_file,model_file,infer_only=False,cfg =
        print("ITERATION:", i, '/', cfg['iterations'], 'on data_size:',data_size,'file:',data_file)
        history=learn(model,cfg, encoder_input_data, decoder_input_data, decoder_target_data)
     model.save(model_file)
-    plot_graphs(history, 'accuracy')
-    plot_graphs(history, 'loss')
+    plot_graphs(fname+"_acc",history, 'accuracy')
+    plot_graphs(fname+"_loss",history, 'loss')
 
   infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data,model_file)
 
 def theo(infer_only=False) :
   run_with('data/tlin.txt','models/tlin_s2s',infer_only=infer_only,cfg =
-    {'sep':':','batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
+    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
 
 def full_theo(infer_only=False) :
   run_with('data/full_tlin.txt','models/full_tlin_s2s',infer_only=infer_only,cfg =
-    {'sep':':','batch_size': 64*4, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':94})
+    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
 
 def cats(infer_only=False) :
   run_with('data/cats.txt','models/cats_s2s',infer_only=infer_only,cfg =
-    {'sep':':','batch_size': 64, 'epochs': 1, 'latent_dim': 256, 'num_samples': 200000, 'iterations':100})
+    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
+
+def smiles(infer_only=False) :
+  run_with('data/smiles.txt','models/smiles_s2s',infer_only=infer_only,cfg =
+    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
 
 def test() :
   theo(infer_only=True)
