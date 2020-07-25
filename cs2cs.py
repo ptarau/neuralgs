@@ -23,12 +23,22 @@ encoding: 0 on the left = -o (lollipop)
           ? non-theorem: failure to find a proof term
 
 '''
-
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 import numpy as np
 np.random.seed(0)
+
+'''
+num_threads=0
+
+tf.config.threading.set_inter_op_parallelism_threads(
+    num_threads # does not seem to work
+)
+
+print('THR',tf.config.threading.get_inter_op_parallelism_threads())
+'''
 
 # All the symbols, .' for padding
 
@@ -182,6 +192,7 @@ def build_model(cfg,chars,MAXLEN) :
   # Apply a dense layer to the every temporal slice of an input. For each of step
   # of the output sequence, decide which character should be chosen.
   model.add(layers.TimeDistributed(layers.Dense(len(chars), activation='softmax')))
+
   model.compile(loss='categorical_crossentropy',
                 optimizer='adam',
                 metrics=['accuracy'])
@@ -229,6 +240,7 @@ def test_with(cfg,ctable,model,x_test,y_test) :
 
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
   maxits=ITERATIONS(cfg)//100
+  history=None
   for iteration in range(0, maxits):
     print('ITERATION:', iteration,'/',maxits)
     print()
@@ -238,10 +250,10 @@ def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
               batch_size=cfg['BATCH_SIZE'],
               epochs=cfg['EPOCHS'],
               validation_data=(x_val, y_val))
-    plot_graphs(history, 'accuracy')
-    plot_graphs(history, 'loss')
     test_with(cfg,ctable,model,x_val,y_val)
   model.save(cfg['MODEL_FILE']) #, save_format='tf')
+  plot_graphs(history, 'accuracy')
+  plot_graphs(history, 'loss')
 
 
 def run_with(cfg,test_only=True) :

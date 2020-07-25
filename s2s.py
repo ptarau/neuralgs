@@ -154,13 +154,15 @@ def learn(model,cfg,encoder_input_data, decoder_input_data, decoder_target_data)
 
     #model.summary()
 
-    model.fit(
+    history=model.fit(
       [encoder_input_data, decoder_input_data],
       decoder_target_data,
       batch_size=cfg['batch_size'],
       epochs=cfg['epochs'],
       validation_split=0.2,
     )
+
+    return history
 
 
 def decode_sequence(input_seq,encoder_model,decoder_model,data,reverse_target_char_index):
@@ -255,6 +257,16 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
     print(r, len(input_text), len(target_text), '==', len(decoded_sentence))
     print(r,input_text,target_text,'==',decoded_sentence)
 
+import matplotlib.pyplot as plt
+
+def plot_graphs(history, metric):
+  plt.plot(history.history[metric])
+  plt.plot(history.history['val_'+metric], '')
+  plt.xlabel("Epochs")
+  plt.ylabel(metric)
+  plt.legend([metric, 'val_'+metric])
+  plt.show()
+
 def run_with(data_file,model_file,infer_only=False,cfg =
     {'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,'iterations' : 1}):
   sep=cfg['sep']
@@ -263,6 +275,7 @@ def run_with(data_file,model_file,infer_only=False,cfg =
   model,encoder_input_data, decoder_input_data, decoder_target_data=build_model(data,cfg)
   model.summary()
   print(cfg)
+  history=None
   if not infer_only :
     data_size=len(data.io_map)
     model.compile(
@@ -271,8 +284,10 @@ def run_with(data_file,model_file,infer_only=False,cfg =
     )
     for i in range(cfg['iterations']) :
        print("ITERATION:", i, '/', cfg['iterations'], 'on data_size:',data_size,'file:',data_file)
-       learn(model,cfg, encoder_input_data, decoder_input_data, decoder_target_data)
+       history=learn(model,cfg, encoder_input_data, decoder_input_data, decoder_target_data)
     model.save(model_file)
+    plot_graphs(history, 'accuracy')
+    plot_graphs(history, 'loss')
 
   infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data,model_file)
 
