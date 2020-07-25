@@ -254,8 +254,8 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
     ok=target_text==decoded_sentence
     if ok : r="+"
     else : r="-"
-    print(r, len(input_text), len(target_text), '==', len(decoded_sentence))
-    print(r,input_text,target_text,'==',decoded_sentence)
+    #print(r, len(input_text), len(target_text), '==', len(decoded_sentence))
+    print(r,':',input_text,'->',target_text,'==',decoded_sentence)
 
 import matplotlib.pyplot as plt
 
