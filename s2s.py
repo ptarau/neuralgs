@@ -47,6 +47,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 import random
+random.seed(42)
 
 """
 ## Prepare the data
@@ -56,6 +57,7 @@ import random
 
 class Data() :
   def __init__(self,data_path,sep,cfg):
+    max_input_len = cfg['max_input_len']
     self.input_texts = []
     self.target_texts = []
     self.io_map=dict()
@@ -63,7 +65,10 @@ class Data() :
     self.target_characters = {" "} #set()
     with open(data_path, "r", encoding="utf-8") as f:
       lines = f.read().split("\n")
+      random.shuffle(lines)
     for line in lines[: min(cfg['num_samples'], len(lines) - 1)]:
+      if len(line)<3 :continue
+      if len(line)>max_input_len : continue
       parts=line.split(sep)
       input_text, target_text = parts[0:2]
       self.io_map[input_text]=target_text # for testing accuracy
@@ -295,19 +300,23 @@ def run_with(data_file,model_file,infer_only=False,cfg =
 
 def theo(infer_only=False) :
   run_with('data/tlin.txt','models/tlin_s2s',infer_only=infer_only,cfg =
-    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+     'num_samples': 200000, 'iterations':1})
 
 def full_theo(infer_only=False) :
   run_with('data/full_tlin.txt','models/full_tlin_s2s',infer_only=infer_only,cfg =
-    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+     'num_samples': 200000, 'iterations':1})
 
 def cats(infer_only=False) :
   run_with('data/cats.txt','models/cats_s2s',infer_only=infer_only,cfg =
-    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+     'num_samples': 200000, 'iterations':1})
 
 def smiles(infer_only=False) :
   run_with('data/smiles.txt','models/smiles_s2s',infer_only=infer_only,cfg =
-    {'sep':':','batch_size': 64, 'epochs': 10, 'latent_dim': 256, 'num_samples': 200000, 'iterations':1})
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+     'num_samples': 200000, 'iterations':1})
 
 def test() :
   theo(infer_only=True)
