@@ -243,8 +243,10 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
   # something readable.
 
   reverse_target_char_index = dict((i, char) for char, i in data.target_token_index.items())
+  ctr=0
+  good=0
+  for _ in range(100):
 
-  for _ in range(50):
     # Take one sequence (part of the training set)
     # for trying out decoding.
     seq_index=random.randrange(len(data.io_map))
@@ -257,10 +259,14 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
     input_text=data.input_texts[seq_index]
     target_text=data.io_map[input_text]
     ok=target_text==decoded_sentence
-    if ok : r="+"
+    ctr +=1
+    if ok :
+      r="+"
+      good+=1
     else : r="-"
     #print(r, len(input_text), len(target_text), '==', len(decoded_sentence))
     print(r,':',input_text,'->',target_text,'==',decoded_sentence)
+  print('success rate:',good,'/',ctr,'=',good/ctr)
 
 import matplotlib.pyplot as plt
 
