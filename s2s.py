@@ -74,6 +74,7 @@ class Data() :
       self.io_map[input_text]=target_text # for testing accuracy
       # We use "tab" as the "start sequence" character
       # for the targets, and "\n" as "end sequence" character.
+      #print('!!!', len(input_text), len(target_text))
       target_text = "\t" + target_text + "\n"
       self.input_texts.append(input_text)
       self.target_texts.append(target_text)
