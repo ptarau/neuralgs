@@ -325,6 +325,11 @@ def smiles(infer_only=False) :
     {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
      'num_samples': 200000, 'iterations':1})
 
+def intuit_nf12(infer_only=False) :
+  run_with('data/intuit_nf12.txt','models/intuit_nf12_s2s',infer_only=infer_only,cfg =
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+     'num_samples': 200000, 'iterations':1})
+
 def test() :
   theo(infer_only=True)
   full_theo(infer_only=True)

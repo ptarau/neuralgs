@@ -306,6 +306,41 @@ def full_tlin(test_only=False) :
   )
   run_with(cfg,test_only=test_only)
 
+
+def intuit_nf(test_only=False) :
+  cfg = dict(
+    TRAINING_FILE='data/intuit_nf.txt',
+    MODEL_FILE='models/intuit_nf_cs2cs',
+    # Parameters for the model and dataset.
+    TRAINING_SIZE=2 ** 18,
+    # Try replacing LSTM, GRU, or SimpleRNN.
+    RNN=layers.LSTM,
+    HIDDEN_SIZE=128,
+    BATCH_SIZE=32,
+    LAYERS=1,
+    EPOCHS=100,
+    GUESSES=30
+  )
+  run_with(cfg,test_only=test_only)
+
+def intuit_nf12(test_only=False) :
+  cfg = dict(
+    TRAINING_FILE='data/intuit_nf12.txt',
+    MODEL_FILE='models/intuit_nf12_cs2cs',
+    # Parameters for the model and dataset.
+    TRAINING_SIZE=2 ** 18,
+    # Try replacing LSTM, GRU, or SimpleRNN.
+    RNN=layers.LSTM,
+    HIDDEN_SIZE=128,
+    BATCH_SIZE=32,
+    LAYERS=1,
+    EPOCHS=100,
+    GUESSES=30
+  )
+  run_with(cfg,test_only=test_only)
+
+
+
 def cats(test_only=False) :
   cfg = dict(
     TRAINING_FILE='data/cats.txt',
