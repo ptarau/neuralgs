@@ -277,8 +277,9 @@ def plot_graphs(fname,history, metric):
   plt.xlabel("Epochs")
   plt.ylabel(metric)
   plt.legend([metric, 'val_'+metric])
-  #plt.show()
-  plt.savefig(fname+'.pdf', bbox_inches='tight')
+  plt.savefig(fname + '.pdf',format="pdf",bbox_inches='tight')
+  plt.show()
+
 
 def run_with(data_file,model_file,infer_only=False,cfg =
     {'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,'iterations' : 1}):
@@ -300,8 +301,9 @@ def run_with(data_file,model_file,infer_only=False,cfg =
        print("ITERATION:", i, '/', cfg['iterations'], 'on data_size:',data_size,'file:',data_file)
        history=learn(model,cfg, encoder_input_data, decoder_input_data, decoder_target_data)
     model.save(model_file)
+    plot_graphs(fname + "_loss", history, 'loss')
     plot_graphs(fname+"_acc",history, 'accuracy')
-    plot_graphs(fname+"_loss",history, 'loss')
+
 
   infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data,model_file)
 
