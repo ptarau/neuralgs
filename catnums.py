@@ -4,19 +4,19 @@ import visuals
 import numpy as np
 # bijection from N to T (standing for the set of binary trees)
 def t(n) :
-  if n is 0 : return ()
+  if n == 0 : return ()
   else :
     assert n>0
     x,y = to_pair_with(nparity(n),n)
     ys = t(y)
-    if x is 0 :
+    if x == 0 :
       zs=ys
     else :
       return  (t(x-1),ys)
 
 # inverse of t, from trees to N
 def n(t) :
- if t is () : return 0
+ if t == () : return 0
  else :
    x,xs=t
    b = tparity(t)
@@ -46,19 +46,19 @@ def tparity(xs) :
 # successor, from T to T without empty tree  
 def s(t) :
   one = (),()
-  if t is () : return one
+  if t == () : return one
   else :
     x,y=t
-    if y is () : return x,one
+    if y == () : return x,one
     else :
       u,v=y
       b=tparity(t)
-      if b is 0 :
-        if x is () : return s(u),v
+      if b == 0 :
+        if x == () : return s(u),v
         else : 
           return (),(s_(x),y)      
       else :
-        if u is () and v is not ():
+        if u == () and v != ():
           w,z=v
           return x,(s(w),z)
         else :
@@ -72,15 +72,15 @@ def s_(t) :
   elif y == one : return x,()
   else :
     b=tparity(t)
-    if b is 0 :
+    if b == 0 :
       u,v=y
-      if u is () and v is not () :
+      if u == () and v != () :
         w,z=v
         return x,(s(w),z)
       else :
         return x, ((),(s_(u),v))     
     else :
-      if x is () :
+      if x == () :
         u,v=y
         return s(u),v
       else :
@@ -88,9 +88,9 @@ def s_(t) :
 
 # double, from T to T     
 def db(t) :
-  if t is () : return ()
+  if t == () : return ()
   else : 
-    if tparity(t) is 0 :
+    if tparity(t) == 0 :
       x,y=t
       return s(x),y
     else :
@@ -98,16 +98,16 @@ def db(t) :
 
 # half rounded down, from T to T  
 def hf(t) :
-  if t is () : return ()
+  if t == () : return ()
   else :
     x,y=t
-    if x is () : return y
+    if x == () : return y
     else : return s_(x),y  
 
 # power of 2, from T to powers of 2 in T
 def exp2(t) :
   one = (),()
-  if t is () : return one
+  if t == () : return one
   else : return s_(t),one
 
 # integer log of 2, from powers of 2 in T, to T
@@ -241,7 +241,7 @@ def sd(n) :
   visuals.showDag(dt) 
   
 def decorate(t) :
-    if t is () : return ('0',)
+    if t == () : return ('0',)
     else :
       x,y=t
       return (str(n(t)),decorate(x),decorate(y))
