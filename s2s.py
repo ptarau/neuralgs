@@ -338,6 +338,6 @@ def test() :
   cats(infer_only=True)
 
 def run() :
-  theo()
-  full_theo()
-  cats()
+  theo(infer_only=False)
+  full_theo(infer_only=False)
+  cats(infer_only=False)
