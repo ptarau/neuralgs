@@ -226,8 +226,8 @@ def infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data, 
   encoder_model = keras.Model(encoder_inputs, encoder_states)
 
   decoder_inputs = model.input[1]  # input_2
-  decoder_state_input_h = keras.Input(shape=(cfg['latent_dim'],), name="input_3")
-  decoder_state_input_c = keras.Input(shape=(cfg['latent_dim'],), name="input_4")
+  decoder_state_input_h = keras.Input(shape=(cfg['latent_dim'],) )#, name="input_3")
+  decoder_state_input_c = keras.Input(shape=(cfg['latent_dim'],) ) #, name="input_4")
   decoder_states_inputs = [decoder_state_input_h, decoder_state_input_c]
   decoder_lstm = model.layers[3]
   decoder_outputs, state_h_dec, state_c_dec = decoder_lstm(
@@ -278,7 +278,8 @@ def plot_graphs(fname,history, metric):
   plt.ylabel(metric)
   plt.legend([metric, 'val_'+metric])
   plt.savefig(fname + '.pdf',format="pdf",bbox_inches='tight')
-  plt.show()
+  #plt.show()
+  plt.close()
 
 
 def run_with(data_file,model_file,infer_only=False,cfg =
@@ -307,37 +308,43 @@ def run_with(data_file,model_file,infer_only=False,cfg =
 
   infer(data,cfg,encoder_input_data, decoder_input_data, decoder_target_data,model_file)
 
-def theo(infer_only=False) :
+EPS=100 #epochs, by default
+
+def theo(infer_only=True) :
   run_with('data/tlin.txt','models/tlin_s2s',infer_only=infer_only,cfg =
-    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
      'num_samples': 200000, 'iterations':1})
 
-def full_theo(infer_only=False) :
+def full_theo(infer_only=True) :
   run_with('data/full_tlin.txt','models/full_tlin_s2s',infer_only=infer_only,cfg =
-    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
      'num_samples': 200000, 'iterations':1})
 
-def cats(infer_only=False) :
+def cats(infer_only=True) :
   run_with('data/cats.txt','models/cats_s2s',infer_only=infer_only,cfg =
-    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
      'num_samples': 200000, 'iterations':1})
 
-def smiles(infer_only=False) :
+def smiles(infer_only=True) :
   run_with('data/smiles.txt','models/smiles_s2s',infer_only=infer_only,cfg =
-    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
      'num_samples': 200000, 'iterations':1})
 
-def intuit_nf12(infer_only=False) :
+def intuit_nf12(infer_only=True) :
   run_with('data/intuit_nf12.txt','models/intuit_nf12_s2s',infer_only=infer_only,cfg =
-    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': 100, 'latent_dim': 256,
+    {'max_input_len':100,'sep':':','batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
      'num_samples': 200000, 'iterations':1})
 
-def test() :
-  theo(infer_only=True)
-  full_theo(infer_only=True)
-  cats(infer_only=True)
-
+# run this to create models and pdf pics for accuracy and loss
 def run() :
   theo(infer_only=False)
   full_theo(infer_only=False)
+  intuit_nf12(infer_only=False)
   cats(infer_only=False)
+
+# this assumes models have been created by run()
+def test() :
+  theo(infer_only=True)
+  full_theo(infer_only=True)
+  intuit_nf12(infer_only=True)
+  cats(infer_only=True)
