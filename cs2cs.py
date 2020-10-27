@@ -242,19 +242,13 @@ def test_with(cfg,ctable,model,x_test,y_test) :
 
 
 def learn(cfg,ctable,model,x_train, y_train,x_val, y_val) :
-  maxits=ITERATIONS(cfg)//100
   history=None
   fname=cfg['MODEL_FILE']
-  for iteration in range(0, maxits):
-    print('ITERATION:', iteration,'/',maxits)
-    print()
-    print('-' * 50)
-    print('Iteration', iteration)
-    history=model.fit(x_train, y_train,
+  history=model.fit(x_train, y_train,
               batch_size=cfg['BATCH_SIZE'],
               epochs=cfg['EPOCHS'],
               validation_data=(x_val, y_val))
-    test_with(cfg,ctable,model,x_val,y_val)
+  test_with(cfg,ctable,model,x_val,y_val)
   model.save(cfg['MODEL_FILE']) #, save_format='tf')
   plot_graphs(fname+"_acc",history, 'accuracy')
   plot_graphs(fname+"_loss",history, 'loss')
@@ -333,8 +327,8 @@ def intuit_nf12(test_only=False) :
     RNN=layers.LSTM,
     HIDDEN_SIZE=128,
     BATCH_SIZE=32,
-    LAYERS=1,
-    EPOCHS=100,
+    LAYERS=10,
+    EPOCHS=32,
     GUESSES=30
   )
   run_with(cfg,test_only=test_only)
