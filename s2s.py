@@ -7,7 +7,7 @@ Date created: 2017/09/29
 Last modified: 2020/04/26
 Description: Character-level recurrent sequence-to-sequence model.
 
-Made it indepandent of the specific data files.
+Made it indepandent of the specific data files. Paul Tarau
 
 """
 
@@ -166,6 +166,8 @@ def learn(model,cfg,encoder_input_data, decoder_input_data, decoder_target_data)
       batch_size=cfg['batch_size'],
       epochs=cfg['epochs'],
       validation_split=0.2,
+      multiprocessing=True,
+      workers=24
     )
 
     return history
