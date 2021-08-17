@@ -202,4 +202,8 @@ fabric.properties
 models/
 old/
 .idea/
+scratch/.data/
+scratch/data
+
+
 
