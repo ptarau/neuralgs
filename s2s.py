@@ -1,3 +1,11 @@
+import random
+
+import numpy as np
+from tensorflow import keras
+import matplotlib.pyplot as plt
+
+random.seed(42)
+
 """
 DERIVED from:
 
@@ -9,9 +17,6 @@ Description: Character-level recurrent sequence-to-sequence model.
 
 Made it indepandent of the specific data files. Paul Tarau
 
-"""
-
-"""
 ## Introduction
 
 This example demonstrates how to implement a basic character-level
@@ -21,7 +26,7 @@ recurrent sequence-to-sequence model.
 
 - We start with input sequences from a domain 
     and corresponding target sequences from another domain.
-    
+
 - An encoder LSTM turns input sequences to 2 state vectors
     (we keep the last LSTM state and discard the outputs).
 - A decoder LSTM is trained to turn the target sequences into
@@ -42,13 +47,6 @@ recurrent sequence-to-sequence model.
     - Repeat until we generate the end-of-sequence character or we
         hit the character limit.
 """
-
-import random
-
-import numpy as np
-from tensorflow import keras
-
-random.seed(42)
 
 """
 ## Prepare the data
@@ -110,6 +108,7 @@ def build_model(data, cfg):
     )
 
     for i, (input_text, target_text) in enumerate(zip(data.input_texts, data.target_texts)):
+        t = 0
         for t, char in enumerate(input_text):
             encoder_input_data[i, t, data.input_token_index[char]] = 1.0
         encoder_input_data[i, t + 1:, data.input_token_index[" "]] = 1.0
@@ -275,9 +274,6 @@ def infer(data, cfg, encoder_input_data, decoder_input_data, decoder_target_data
     print('success rate:', good, '/', ctr, '=', good / ctr)
 
 
-import matplotlib.pyplot as plt
-
-
 def plot_graphs(fname, history, metric):
     plt.plot(history.history[metric])
     plt.plot(history.history['val_' + metric], '')
@@ -289,8 +285,9 @@ def plot_graphs(fname, history, metric):
     plt.close()
 
 
-def run_with(data_file, model_file, infer_only=False, cfg=
-{'sep': ':', 'batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000, 'iterations': 1}):
+def run_with(data_file, model_file, infer_only=False,
+             cfg={'sep': ':', 'batch_size': 64, 'epochs': 100, 'latent_dim': 256, 'num_samples': 10000,
+                  'iterations': 1}):
     sep = cfg['sep']
     data = Data(data_file, sep, cfg)
     fname = model_file
@@ -319,33 +316,33 @@ EPS = 100  # epochs, by default
 
 
 def theo(infer_only=True):
-    run_with('data/tlin.txt', 'models/tlin_s2s', infer_only=infer_only, cfg=
-    {'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
-     'num_samples': 200000, 'iterations': 1})
+    run_with('data/tlin.txt', 'models/tlin_s2s', infer_only=infer_only,
+             cfg={'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
+                  'num_samples': 200000, 'iterations': 1})
 
 
 def full_theo(infer_only=True):
-    run_with('data/full_tlin.txt', 'models/full_tlin_s2s', infer_only=infer_only, cfg=
-    {'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
-     'num_samples': 200000, 'iterations': 1})
+    run_with('data/full_tlin.txt', 'models/full_tlin_s2s', infer_only=infer_only,
+             cfg={'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
+                  'num_samples': 200000, 'iterations': 1})
 
 
 def cats(infer_only=True):
-    run_with('data/cats.txt', 'models/cats_s2s', infer_only=infer_only, cfg=
-    {'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
-     'num_samples': 200000, 'iterations': 1})
+    run_with('data/cats.txt', 'models/cats_s2s', infer_only=infer_only,
+             cfg={'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
+                  'num_samples': 200000, 'iterations': 1})
 
 
 def smiles(infer_only=True):
-    run_with('data/smiles.txt', 'models/smiles_s2s', infer_only=infer_only, cfg=
-    {'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
-     'num_samples': 200000, 'iterations': 1})
+    run_with('data/smiles.txt', 'models/smiles_s2s', infer_only=infer_only,
+             cfg={'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
+                  'num_samples': 200000, 'iterations': 1})
 
 
 def intuit_nf12(infer_only=True):
-    run_with('data/intuit_nf12.txt', 'models/intuit_nf12_s2s', infer_only=infer_only, cfg=
-    {'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
-     'num_samples': 200000, 'iterations': 1})
+    run_with('data/intuit_nf12.txt', 'models/intuit_nf12_s2s', infer_only=infer_only,
+             cfg={'max_input_len': 100, 'sep': ':', 'batch_size': 64, 'epochs': EPS, 'latent_dim': 256,
+                  'num_samples': 200000, 'iterations': 1})
 
 
 # run this to create models and pdf pics for accuracy and loss

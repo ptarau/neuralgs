@@ -129,8 +129,8 @@ class CharacterTable:
 
 def vectorize(ctable,questions,expected,chars,MAXLEN) :
   print('Vectorization...', (len(questions), MAXLEN, len(chars)))
-  x = np.zeros((len(questions), MAXLEN, len(chars)), dtype=np.bool)
-  y = np.zeros((len(questions), MAXLEN, len(chars)), dtype=np.bool)
+  x = np.zeros((len(questions), MAXLEN, len(chars)), dtype=bool)
+  y = np.zeros((len(questions), MAXLEN, len(chars)), dtype=bool)
 
   for i, sentence in enumerate(questions):
     x[i] = ctable.encode(sentence, MAXLEN)
